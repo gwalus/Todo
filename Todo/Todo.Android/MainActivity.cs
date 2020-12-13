@@ -3,6 +3,9 @@ using Android.Content.PM;
 using Android.OS;
 using Prism;
 using Prism.Ioc;
+using System.IO;
+using Todo.Services;
+using TodoDatabase.Services;
 
 namespace Todo.Droid
 {
@@ -17,8 +20,10 @@ namespace Todo.Droid
 
             base.OnCreate(savedInstanceState);
 
+            var dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "prism.db");
+
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            LoadApplication(new App(new AndroidInitializer()));
+            LoadApplication(new App(new AndroidInitializer(dbPath)));
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
@@ -31,9 +36,16 @@ namespace Todo.Droid
 
     public class AndroidInitializer : IPlatformInitializer
     {
+        private readonly string _dbPath;
+
+        public AndroidInitializer(string dbPath)
+        {
+            _dbPath = dbPath;
+        }
+
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            // Register any platform specific implementations
+            containerRegistry.RegisterInstance<IDataService>(new DataService(_dbPath));
         }
     }
 }

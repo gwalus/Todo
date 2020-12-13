@@ -107,6 +107,10 @@
     <AndroidResource Include="Resources\values\strings.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TodoDatabase\TodoDatabase.csproj">
+      <Project>{5e108aba-fd4c-4dae-83da-fb8ddd6b6150}</Project>
+      <Name>TodoDatabase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Todo\Todo.csproj">
       <Project>{A682884C-CB44-4A89-B752-27BB634E0ABE}</Project>
       <Name>Todo</Name>
