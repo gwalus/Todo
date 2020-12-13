@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="Todo.Views.AddJobPage">
+
+    <Frame Margin="10"
+           CornerRadius="15" 
+           BackgroundColor="{StaticResource FramesBackground}" 
+           BorderColor="{StaticResource FramesBorderColor}">
+        <StackLayout>
+            <Label Text="New Job"
+                   FontSize="Title"/>
+            <Entry Placeholder="To do something..." 
+                   Text="{Binding Description, Mode=TwoWay}"/>
+            <Button Text="Add"
+                    CornerRadius="15"
+                    BorderColor="{StaticResource FramesBorderColor}"
+                    BorderWidth="1"
+                    Command="{Binding AddJobCommand}"
+                    CommandParameter="{Binding Description}"/>
+        </StackLayout>
+    </Frame>
+
+</ContentPage>

@@ -1,19 +1,23 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Todo.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        public MainPageViewModel(INavigationService navigationService)
-            : base(navigationService)
+        private DelegateCommand _goToAddJobPageCommand;
+        private readonly INavigationService _navigationService;
+
+        public DelegateCommand GoToAddJobPageCommand => _goToAddJobPageCommand ?? (_goToAddJobPageCommand = new DelegateCommand(GoToAddJobPage));
+
+        public MainPageViewModel(INavigationService navigationService) : base(navigationService)
         {
-            Title = "Main Page";
+            _navigationService = navigationService;
+        }
+
+        async void GoToAddJobPage()
+        {
+            await _navigationService.NavigateAsync("AddJobPage");    
         }
     }
 }

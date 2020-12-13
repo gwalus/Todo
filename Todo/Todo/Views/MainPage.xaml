@@ -1,11 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Todo.Views.MainPage"
-             Title="{Binding Title}">
+            xmlns:views="clr-namespace:Todo.Views"
+             Title="TodoApp">
 
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <Label Text="Welcome to Xamarin Forms and Prism!" />
-    </StackLayout>
+    <TabbedPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding GoToAddJobPageCommand}"/>
+    </TabbedPage.ToolbarItems>
+    
+    <views:JobsPage Title="To do list" BackgroundColor="White"/>
+    <views:ProfilePage Title="Profile" BackgroundColor="White"/>
 
-</ContentPage>
+</TabbedPage>

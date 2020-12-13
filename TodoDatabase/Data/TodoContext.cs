@@ -18,7 +18,7 @@ namespace TodoDatabase.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(string.Format("Filename={0}", _databasePath));
+            optionsBuilder.UseSqlite($"Data Source = {_databasePath}");
         }
     }
 }
