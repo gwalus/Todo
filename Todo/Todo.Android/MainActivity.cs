@@ -20,7 +20,7 @@ namespace Todo.Droid
 
             base.OnCreate(savedInstanceState);
 
-            var dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "prism.db");
+            var dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "todo.db");
 
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App(new AndroidInitializer(dbPath)));
