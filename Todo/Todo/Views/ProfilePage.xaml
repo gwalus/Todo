@@ -8,7 +8,9 @@
     <TableView Intent="Settings" HasUnevenRows="True">
         <TableSection Title="Successed Jobs">
             <ViewCell>
-                <Button Text="Archive" CornerRadius="10" Margin="5"/>
+                <Button Text="Archive"
+                        CornerRadius="10"
+                        Margin="5"/>
             </ViewCell>
         </TableSection>
 
@@ -22,11 +24,10 @@
                             </Style>
                         </ResourceDictionary>
                     </StackLayout.Resources>
-                    <!--<Label Text="{Binding ActiveJobs, StringFormat='Active: {0}'}"/>-->
-                    <Label Text="Active: 10"/>
-                    <!--<Label Text="{Binding EndedJobs, StringFormat='Ended: {0}'}"/>-->
-                    <Label Text="Ended: 120"/>
-                    <!--<Label Text="{Binding , StringFormat='Actual: {0}'}"/>-->
+                    
+                    <Label Text="{Binding ActiveJobs, StringFormat='Active: {0}'}"/>
+                    <Label Text="{Binding EndedJobs, StringFormat='Ended: {0}'}"/>
+                    
                 </StackLayout>
             </ViewCell>
         </TableSection>

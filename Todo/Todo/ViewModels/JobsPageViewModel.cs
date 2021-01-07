@@ -1,15 +1,17 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Prism.Mvvm;
+using Prism.AppModel;
+using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Todo.Models;
 using Todo.Services;
 
 namespace Todo.ViewModels
 {
-    public class JobsPageViewModel : BindableBase
+    public class JobsPageViewModel : ViewModelBase, IPageLifecycleAware
     {
         #region Fields
         private ObservableCollection<Job> _jobs;
@@ -21,7 +23,7 @@ namespace Todo.ViewModels
         public ObservableCollection<Job> Jobs
         {
             get { return _jobs; }
-            set { _jobs = value; }
+            set { _jobs = value; RaisePropertyChanged(nameof(Jobs)); }
         }
 
         private object _selectedItem;
@@ -44,16 +46,15 @@ namespace Todo.ViewModels
         #endregion
 
         #region Constructor
-        public JobsPageViewModel(IDataService dataService, IPageDialogService pageDialogService)
+        public JobsPageViewModel(IDataService dataService, IPageDialogService pageDialogService, INavigationService navigationService) : base(navigationService)
         {
             _dataService = dataService;
             _pageDialogService = pageDialogService;
-            LoadJobs();
         }
         #endregion
 
         #region Methods
-        async void LoadJobs()
+        private async Task LoadJobs()
         {
             var jobs = await _dataService.GetJobs();
 
@@ -62,12 +63,13 @@ namespace Todo.ViewModels
                 .OrderByDescending(job => DateTime.Parse(job.Added))
                 .ToList();
 
-            if (Jobs != null)
-            {
-                Jobs.Clear();
-                orderedJobs.ForEach(x => Jobs.Add(x));
-            }
-            else Jobs = new ObservableCollection<Job>(orderedJobs);
+            //if (Jobs != null)
+            //{
+            //    Jobs.Clear();
+            //    orderedJobs.ForEach(x => Jobs.Add(x));
+            //}
+            //else 
+                Jobs = new ObservableCollection<Job>(orderedJobs);
         }
 
         private async void MarkAsEnd(Job job)
@@ -78,10 +80,18 @@ namespace Todo.ViewModels
             {
                 job.IsEnded = true;
                 if (await _dataService.UpdateJob(job))
-                    LoadJobs();
-                else
-                    await _pageDialogService.DisplayAlertAsync("Information", "Complete", "Yes");
+                    await LoadJobs();
             }
+        }
+
+        public void OnAppearing()
+        {
+            Task.Run(() => LoadJobs()).Wait();
+        }
+
+        public void OnDisappearing()
+        {
+            //throw new NotImplementedException();
         }
         #endregion
     }
