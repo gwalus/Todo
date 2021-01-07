@@ -1,5 +1,7 @@
-﻿using Prism.AppModel;
+﻿using Microcharts;
+using Prism.AppModel;
 using Prism.Navigation;
+using SkiaSharp;
 using System.Linq;
 using System.Threading.Tasks;
 using Todo.Services;
@@ -13,29 +15,14 @@ namespace Todo.ViewModels
         #endregion
 
         #region Properties
-        private string _activeJobs;
+        private DonutChart _chart;
 
-        public string ActiveJobs
+        public DonutChart Chart
         {
-            get { return _activeJobs; }
-            set
-            { 
-                _activeJobs = value;
-                RaisePropertyChanged(nameof(ActiveJobs));
-            }
+            get { return _chart; }
+            set { _chart = value; RaisePropertyChanged(nameof(Chart)); }
         }
 
-        private string _endedJobs;
-
-        public string EndedJobs
-        {
-            get { return _endedJobs; }
-            set
-            {
-                _endedJobs = value;
-                RaisePropertyChanged(nameof(EndedJobs));
-            }
-        }
         #endregion
 
         #region Constructors
@@ -44,13 +31,40 @@ namespace Todo.ViewModels
             _dataService = dataService;
         }
         #endregion
-        
+
         private async Task GetStatistics()
         {
             var jobs = await _dataService.GetJobs();
 
-            ActiveJobs = jobs.Where(x => x.IsEnded == false).Count().ToString();
-            EndedJobs = jobs.Where(x => x.IsEnded).Count().ToString();
+            int active = jobs.Where(x => x.IsEnded == false).Count();
+            int ended = jobs.Where(x => x.IsEnded).Count();
+
+            var entries = new[]
+            {
+                SetChartEntry(nameof(active), active, "#77d065"),
+                SetChartEntry(nameof(ended), ended, "#2c3e50"),
+                SetChartEntry("deleted", 4, "#b455b6")
+                // OPRACOWAĆ
+            };
+
+            var chart = new DonutChart 
+            {
+                Entries = entries, 
+                LabelTextSize = 30 
+            };
+
+            Chart = chart;
+        }
+
+        private ChartEntry SetChartEntry(string label, int value, string hexaColor)
+        {
+            return new ChartEntry(value)
+            {
+                Label = label,
+                ValueLabel = value.ToString(),
+                ValueLabelColor = SKColor.Parse(hexaColor),
+                Color = SKColor.Parse(hexaColor)
+            };
         }
 
         public void OnAppearing()

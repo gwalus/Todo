@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="Todo.Views.ProfilePage">
 
@@ -24,10 +25,12 @@
                             </Style>
                         </ResourceDictionary>
                     </StackLayout.Resources>
-                    
-                    <Label Text="{Binding ActiveJobs, StringFormat='Active: {0}'}"/>
-                    <Label Text="{Binding EndedJobs, StringFormat='Ended: {0}'}"/>
-                    
+
+                    <Label Text="Active/Ended/Deleted" 
+                           HorizontalTextAlignment="Center"/>
+                    <microcharts:ChartView Chart="{Binding Chart}" 
+                                           HeightRequest="300"/>
+
                 </StackLayout>
             </ViewCell>
         </TableSection>

@@ -6,11 +6,16 @@
              x:Class="Todo.Views.JobsPage">
 
     <CollectionView ItemsSource="{Binding Jobs}" 
-                    Margin="10" 
+                    Margin="10"
                     SelectionMode="Single" 
                     SelectionChangedCommand="{Binding MarkAsEndCommand}" 
                     SelectionChangedCommandParameter="{Binding SelectedItem}" 
                     SelectedItem="{Binding SelectedItem}">
+
+        <!--<CollectionView.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding MarkAsEndCommand}" CommandParameter="{Binding SelectedItem}"/>
+        </CollectionView.GestureRecognizers>-->
+        
         <CollectionView.ItemTemplate>
             <DataTemplate>
                 <StackLayout Margin="5">

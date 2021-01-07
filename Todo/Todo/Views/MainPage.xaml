@@ -9,7 +9,7 @@
         <ToolbarItem Text="Add" Command="{Binding GoToAddJobPageCommand}"/>
     </TabbedPage.ToolbarItems>
     
-    <views:JobsPage Title="To do list" BackgroundColor="White"/>
+    <views:JobsPage Title="Active list" BackgroundColor="White"/>
     <views:ProfilePage Title="Profile" BackgroundColor="White"/>
 
 </TabbedPage>

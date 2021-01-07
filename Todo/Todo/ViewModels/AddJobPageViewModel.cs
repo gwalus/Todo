@@ -49,7 +49,7 @@ namespace Todo.ViewModels
                     parameter =>
                     {
                         if (string.IsNullOrEmpty(parameter)) return false;
-                        if (parameter.Length < 5) return false;
+                        if (parameter.Length < 4) return false;
                         return true;
                     }
                     ));
@@ -67,7 +67,7 @@ namespace Todo.ViewModels
         #endregion
 
         #region Methods
-        async void AddJob(Job newJob)
+        private async void AddJob(Job newJob)
         {
             if (await _dataService.AddJob(newJob))
             {

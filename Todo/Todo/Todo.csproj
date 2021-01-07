@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microcharts.Forms" Version="0.9.5.9" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="SQLitePCLRaw.core" Version="2.0.4" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1364" />
