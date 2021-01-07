@@ -1,8 +1,12 @@
-# TodoAPP
-## Xamarin.Forms
+# Todo application with Xamarin.Forms
 
-* Prism
-- MVVM
-- DI
-
-* [MicroCharts](https://github.com/dotnet-ad/Microcharts)
++ [PrismLibrary](https://prismlibrary.com)
+    + MVVM
+    + Behaviors
+    + Dialogs
+    + Navigation
++ EntityFrameworkCore
+    + Sqlite data storage
+    + CodeFirst
++ [MicroCharts](https://github.com/dotnet-ad/Microcharts)
+    * Donut Chart
