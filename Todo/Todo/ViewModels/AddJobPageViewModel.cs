@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using System;
@@ -8,13 +7,16 @@ using Todo.Services;
 
 namespace Todo.ViewModels
 {
-    public class AddJobPageViewModel : BindableBase
+    public class AddJobPageViewModel : ViewModelBase
     {
+        #region Fields
         private readonly IDataService _dataService;
         private readonly INavigationService _navigationService;
         private readonly IPageDialogService _pageDialogService;
         private string _description;
+        #endregion
 
+        #region Properties
         public string Description
         {
             get { return _description; }
@@ -24,7 +26,9 @@ namespace Todo.ViewModels
                 RaisePropertyChanged(nameof(Description));
             }
         }
+        #endregion
 
+        #region Commands
         private RelayCommand<string> _addJobCommand;
         public RelayCommand<string> AddJobCommand
         {
@@ -51,7 +55,18 @@ namespace Todo.ViewModels
                     ));
             }
         }
+        #endregion
 
+        #region Constructors
+        public AddJobPageViewModel(IDataService dataService, INavigationService navigationService, IPageDialogService pageDialogService) : base(navigationService)
+        {
+            _dataService = dataService;
+            _navigationService = navigationService;
+            _pageDialogService = pageDialogService;
+        }
+        #endregion
+
+        #region Methods
         async void AddJob(Job newJob)
         {
             if (await _dataService.AddJob(newJob))
@@ -65,12 +80,6 @@ namespace Todo.ViewModels
                 Description = string.Empty;
             }
         }
-
-        public AddJobPageViewModel(IDataService dataService, INavigationService navigationService, IPageDialogService pageDialogService)
-        {
-            _dataService = dataService;
-            _navigationService = navigationService;
-            _pageDialogService = pageDialogService;
-        }
+        #endregion
     }
 }

@@ -9,11 +9,11 @@ namespace TodoDatabase.Services
 {
     public class DataService : IDataService
     {
-        private TodoContext _dbContext;
+        private TodoSqliteContext _dbContext;
 
         public DataService(string dbPath)
         {
-            _dbContext = new TodoContext(dbPath);
+            _dbContext = new TodoSqliteContext(dbPath);
         }
 
         public async Task<List<Job>> GetJobs()

@@ -3,11 +3,11 @@ using Todo.Models;
 
 namespace TodoDatabase.Data
 {
-    public class TodoContext : DbContext
+    public class TodoSqliteContext : DbContext
     {
         private readonly string _databasePath;
 
-        public TodoContext(string databasePath)
+        public TodoSqliteContext(string databasePath)
         {
             _databasePath = databasePath;
 

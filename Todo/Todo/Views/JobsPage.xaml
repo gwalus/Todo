@@ -5,6 +5,24 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="Todo.Views.JobsPage">
 
-    <Label Text="To jest jobs page"/>
+    <CollectionView ItemsSource="{Binding Jobs}" 
+                    Margin="10" 
+                    SelectionMode="Single" 
+                    SelectionChangedCommand="{Binding MarkAsEndCommand}" 
+                    SelectionChangedCommandParameter="{Binding SelectedItem}" 
+                    SelectedItem="{Binding SelectedItem}">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <StackLayout Margin="5">
+                    <Frame CornerRadius="15" BorderColor="Black">
+                        <StackLayout>
+                            <Label Text="{Binding Description}" FontSize="Medium"/>
+                            <Label Text="{Binding Added, StringFormat='Added: {0}'}" HorizontalTextAlignment="End"/>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 
 </ContentPage>
