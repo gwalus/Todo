@@ -23,7 +23,11 @@ namespace Todo.ViewModels
         public ObservableCollection<Job> Jobs
         {
             get { return _jobs; }
-            set { _jobs = value; RaisePropertyChanged(nameof(Jobs)); }
+            set 
+            {
+                _jobs = value; 
+                RaisePropertyChanged(nameof(Jobs)); 
+            }
         }
 
         private object _selectedItem;
@@ -37,12 +41,11 @@ namespace Todo.ViewModels
                 RaisePropertyChanged(nameof(SelectedItem));
             }
         }
-
         #endregion
 
         #region Commands
         private RelayCommand<Job> _markAsEndCommand;
-        public RelayCommand<Job> MarkAsEndCommand => _markAsEndCommand ?? (_markAsEndCommand = new RelayCommand<Job>(MarkAsEnd));
+        public RelayCommand<Job> MarkAsEndCommand => _markAsEndCommand ??= new RelayCommand<Job>(UpdateJob);
         #endregion
 
         #region Constructor
@@ -58,30 +61,39 @@ namespace Todo.ViewModels
         {
             var jobs = await _dataService.GetJobs();
 
-            var orderedJobs = jobs
-                .Where(job => job.IsEnded == false)
+            if(jobs != null)
+            {
+                var orderedJobs = jobs
+                .Where(job => job.IsEnded == false && job.IsDeleted == false)
                 .OrderByDescending(job => DateTime.Parse(job.Added))
                 .ToList();
 
-            //if (Jobs != null)
-            //{
-            //    Jobs.Clear();
-            //    orderedJobs.ForEach(x => Jobs.Add(x));
-            //}
-            //else 
                 Jobs = new ObservableCollection<Job>(orderedJobs);
+            }                
         }
 
-        private async void MarkAsEnd(Job job)
+        private async void UpdateJob(Job job)
         {
-            var result = await _pageDialogService.DisplayAlertAsync("Information", $"Complete the task \"{job.Description}\"?", "Yes", "Not yet");
+            var resultComplete = await _pageDialogService.DisplayAlertAsync("Information", $"Complete the task \"{job.Description}\"?", "Complete", "Not yet");
 
-            if (result)
+            if (resultComplete)
             {
                 job.IsEnded = true;
+                job.Ended = DateTime.Now.ToString();
                 if (await _dataService.UpdateJob(job))
                     await LoadJobs();
             }
+            else
+            {
+                var resultDelete = await _pageDialogService.DisplayAlertAsync("Information", $"Delete the task \"{job.Description}\"?", "Delete", "No");
+                if (resultDelete)
+                {
+                    job.IsDeleted = true;
+                    if (await _dataService.UpdateJob(job))
+                        await LoadJobs();
+                }
+            }
+
         }
 
         public void OnAppearing()

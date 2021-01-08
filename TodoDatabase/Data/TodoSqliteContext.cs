@@ -10,7 +10,7 @@ namespace TodoDatabase.Data
         public TodoSqliteContext(string databasePath)
         {
             _databasePath = databasePath;
-
+            
             Database.EnsureCreated();
         }
 

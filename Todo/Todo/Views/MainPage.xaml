@@ -6,7 +6,8 @@
              Title="TodoApp">
 
     <TabbedPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding GoToAddJobPageCommand}"/>
+        <ToolbarItem Text="+" 
+                     Command="{Binding GoToAddJobPageCommand}"/>
     </TabbedPage.ToolbarItems>
     
     <views:JobsPage Title="Active list" BackgroundColor="White"/>

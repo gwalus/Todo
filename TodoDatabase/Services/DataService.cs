@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Todo.Models;
 using Todo.Services;
@@ -25,6 +27,21 @@ namespace TodoDatabase.Services
         {
             await _dbContext.AddAsync(entity);
             return await SaveChanged();
+
+            //for (int i = 0; i < 41; i++)
+            //{
+            //    var job = new Job()
+            //    {
+            //        Description = i.ToString(),
+            //        Added = DateTime.Now.ToString(),
+            //        IsEnded = true
+            //    };
+
+            //    await _dbContext.AddAsync(job);
+            //    await _dbContext.SaveChangesAsync();
+            //}
+
+            //return true;
         }
 
         public async Task<bool> UpdateJob(Job job)
@@ -38,6 +55,11 @@ namespace TodoDatabase.Services
             if (await _dbContext.SaveChangesAsync() > 0)
                 return true;
             return false;
+        }
+
+        public async Task<List<Job>> GetEndedJobs()
+        {
+            return await _dbContext.Jobs.Where(x => x.IsEnded).ToListAsync();
         }
     }
 }

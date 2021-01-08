@@ -8,7 +8,7 @@ namespace Todo.ViewModels
         private DelegateCommand _goToAddJobPageCommand;
         private readonly INavigationService _navigationService;
 
-        public DelegateCommand GoToAddJobPageCommand => _goToAddJobPageCommand ?? (_goToAddJobPageCommand = new DelegateCommand(GoToAddJobPage));
+        public DelegateCommand GoToAddJobPageCommand => _goToAddJobPageCommand ??= new DelegateCommand(GoToAddJobPage);
 
         public MainPageViewModel(INavigationService navigationService) : base(navigationService)
         {

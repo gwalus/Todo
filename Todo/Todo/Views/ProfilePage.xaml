@@ -11,7 +11,8 @@
             <ViewCell>
                 <Button Text="Archive"
                         CornerRadius="10"
-                        Margin="5"/>
+                        Margin="5"
+                        Command="{Binding GoToEndedJobsCommand}"/>
             </ViewCell>
         </TableSection>
 

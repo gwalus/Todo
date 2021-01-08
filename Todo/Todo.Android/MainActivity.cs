@@ -21,7 +21,7 @@ namespace Todo.Droid
 
             base.OnCreate(savedInstanceState);
 
-            var dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "todo.db");
+            var dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "todov2.db");
 
             Forms.SetFlags("SwipeView_Experimental");
 

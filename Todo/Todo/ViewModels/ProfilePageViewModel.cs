@@ -1,9 +1,11 @@
-﻿using Microcharts;
+﻿using GalaSoft.MvvmLight.Command;
+using Microcharts;
 using Prism.AppModel;
 using Prism.Navigation;
-using SkiaSharp;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Todo.Interfaces;
 using Todo.Services;
 
 namespace Todo.ViewModels
@@ -12,6 +14,8 @@ namespace Todo.ViewModels
     {
         #region Fields
         private readonly IDataService _dataService;
+        private readonly INavigationService _navigationService;
+        private readonly IMicrochartsService _microchartsService;
         #endregion
 
         #region Properties
@@ -20,31 +24,43 @@ namespace Todo.ViewModels
         public DonutChart Chart
         {
             get { return _chart; }
-            set { _chart = value; RaisePropertyChanged(nameof(Chart)); }
+            set 
+            {
+                _chart = value; 
+                RaisePropertyChanged(nameof(Chart));
+            }
         }
+        #endregion
 
+        #region Commands
+        private RelayCommand _goToEndedJobsCommand;
+
+        public RelayCommand GoToEndedJobsCommand => _goToEndedJobsCommand ??= new RelayCommand(GoToEndedJobsPage);
         #endregion
 
         #region Constructors
-        public ProfilePageViewModel(IDataService dataService, INavigationService navigationService) : base(navigationService)
+        public ProfilePageViewModel(IDataService dataService, INavigationService navigationService, IMicrochartsService microchartsService) : base(navigationService)
         {
             _dataService = dataService;
+            _navigationService = navigationService;
+            _microchartsService = microchartsService;
         }
         #endregion
 
+        #region Methods
         private async Task GetStatistics()
         {
             var jobs = await _dataService.GetJobs();
 
-            int active = jobs.Where(x => x.IsEnded == false).Count();
+            int active = jobs.Where(x => x.IsEnded == false && x.IsDeleted == false).Count();
             int ended = jobs.Where(x => x.IsEnded).Count();
+            int deleted = jobs.Where(x => x.IsDeleted).Count();
 
             var entries = new[]
             {
-                SetChartEntry(nameof(active), active, "#77d065"),
-                SetChartEntry(nameof(ended), ended, "#2c3e50"),
-                SetChartEntry("deleted", 4, "#b455b6")
-                // OPRACOWAĆ
+                _microchartsService.SetChartEntry(nameof(active), active, "#77d065"),
+                _microchartsService.SetChartEntry(nameof(ended), ended, "#2c3e50"),
+                _microchartsService.SetChartEntry(nameof(deleted), deleted, "#b455b6"),
             };
 
             var chart = new DonutChart 
@@ -56,15 +72,9 @@ namespace Todo.ViewModels
             Chart = chart;
         }
 
-        private ChartEntry SetChartEntry(string label, int value, string hexaColor)
+        private void GoToEndedJobsPage()
         {
-            return new ChartEntry(value)
-            {
-                Label = label,
-                ValueLabel = value.ToString(),
-                ValueLabelColor = SKColor.Parse(hexaColor),
-                Color = SKColor.Parse(hexaColor)
-            };
+            _navigationService.NavigateAsync("EndedJobsPage");
         }
 
         public void OnAppearing()
@@ -76,5 +86,6 @@ namespace Todo.ViewModels
         {
             //throw new System.NotImplementedException();
         }
+        #endregion
     }
 }

@@ -34,12 +34,12 @@ namespace Todo.ViewModels
         {
             get
             {
-                return _addJobCommand ?? (_addJobCommand = new RelayCommand<string>(
+                return _addJobCommand ??= new RelayCommand<string>(
                     parameter =>
                     {
                         var newJob = new Job()
                         {
-                            Description = parameter,
+                            Description = parameter.Trim(),
                             Added = DateTime.Now.ToString(),
                             IsEnded = false
                         };
@@ -49,10 +49,9 @@ namespace Todo.ViewModels
                     parameter =>
                     {
                         if (string.IsNullOrEmpty(parameter)) return false;
-                        if (parameter.Length < 4) return false;
+                        if (parameter.Length < 3) return false;
                         return true;
-                    }
-                    ));
+                    });
             }
         }
         #endregion

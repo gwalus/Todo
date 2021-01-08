@@ -12,13 +12,20 @@
                     SelectionChangedCommandParameter="{Binding SelectedItem}" 
                     SelectedItem="{Binding SelectedItem}">
 
-        <!--<CollectionView.GestureRecognizers>
-            <TapGestureRecognizer Command="{Binding MarkAsEndCommand}" CommandParameter="{Binding SelectedItem}"/>
-        </CollectionView.GestureRecognizers>-->
-        
         <CollectionView.ItemTemplate>
             <DataTemplate>
                 <StackLayout Margin="5">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup Name="CommonStates">
+                            <VisualState Name="Normal" />
+                            <VisualState Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="White" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+
                     <Frame CornerRadius="15" BorderColor="Black">
                         <StackLayout>
                             <Label Text="{Binding Description}" FontSize="Medium"/>

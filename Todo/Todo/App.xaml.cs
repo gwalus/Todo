@@ -1,5 +1,7 @@
 using Prism;
 using Prism.Ioc;
+using Todo.Interfaces;
+using Todo.Services;
 using Todo.ViewModels;
 using Todo.Views;
 using Xamarin.Essentials.Implementation;
@@ -31,6 +33,9 @@ namespace Todo
             containerRegistry.RegisterForNavigation<JobsPage, JobsPageViewModel>();
             containerRegistry.RegisterForNavigation<ProfilePage, ProfilePageViewModel>();
             containerRegistry.RegisterForNavigation<AddJobPage, AddJobPageViewModel>();
+            containerRegistry.RegisterForNavigation<EndedJobsPage, EndedJobsPageViewModel>();
+
+            containerRegistry.RegisterSingleton<IMicrochartsService, MicrochartsService>();
         }
     }
 }
