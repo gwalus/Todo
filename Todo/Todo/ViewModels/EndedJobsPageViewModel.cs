@@ -3,6 +3,7 @@ using Prism.AppModel;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Todo.Dtos;
 using Todo.Helpers;
@@ -26,6 +27,8 @@ namespace Todo.ViewModels
         private int _pageNumber = 1;
         private int _pageSize = 10;
         private string _searchJob;
+        private int _searchedJobsCount;
+        private bool _isInSearchMode = false;
         #endregion
 
         #region Properties
@@ -56,7 +59,17 @@ namespace Todo.ViewModels
             {
                 _searchJob = value;
                 RaisePropertyChanged(nameof(SearchJob));
-                Task.Run(() => GetEndedJobsSearch(PageNumber, _searchJob)).Wait();
+
+                if (string.IsNullOrEmpty(SearchJob))
+                {
+                    _isInSearchMode = false;
+                    Task.Run(() => GetEndedJobs(PageNumber)).Wait();
+                }
+                else
+                {
+                    _isInSearchMode = true;
+                    Task.Run(() => GetEndedJobsSearch(PageNumber, _searchJob)).Wait();
+                }
             }
         }
         #endregion
@@ -96,9 +109,12 @@ namespace Todo.ViewModels
         {
             var endedJobs = await _dataService.GetEndedJobs();
 
-            var pagedList = new PagedList<Job>().CreatePagedListByDescription(endedJobs, currentPage, description);
+            var pagedList = new PagedList<Job>();
 
-            CreateEndedJobList(pagedList);
+            _searchedJobsCount = pagedList.GetJobsCountByDescription(endedJobs, description);
+            var searchedPagedList = pagedList.CreatePagedListByDescription(endedJobs, currentPage, description);
+
+            CreateEndedJobList(searchedPagedList);
         }
 
         private void CreateEndedJobList(List<Job> pagedList)
@@ -121,13 +137,27 @@ namespace Todo.ViewModels
 
         private void GoToNextPage(int parameter)
         {
-            ++PageNumber;
-            Task.Run(() => GetEndedJobs(PageNumber)).Wait();
+            if(_isInSearchMode)
+            {
+                ++PageNumber;
+                Task.Run(() => GetEndedJobsSearch(PageNumber, SearchJob)).Wait();
+            }
+            else
+            {
+                ++PageNumber;
+                Task.Run(() => GetEndedJobs(PageNumber)).Wait();
+            }
         }
 
         private bool GoToNextPageCanExecute(int pageNumber)
         {            
-            if (_jobsCount > pageNumber * _pageSize) return true;
+            if(_isInSearchMode)
+            {
+                if (_searchedJobsCount > pageNumber * _pageSize) return true;
+                return false;
+            }
+
+            else if (_jobsCount > pageNumber * _pageSize) return true;
                 return false;
         }
 
