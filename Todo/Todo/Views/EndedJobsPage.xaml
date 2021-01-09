@@ -4,12 +4,18 @@
              x:Class="Todo.Views.EndedJobsPage">
     <ContentPage.Content>
         <StackLayout Margin="5">
-            <Label Text="Archive..." 
+            <!--<Label Text="Archive..." 
                    HorizontalOptions="CenterAndExpand"
                    FontSize="Large"
                    FontAttributes="Italic"
+                   Margin="5"/>-->
+
+            <Entry Placeholder="Search job..." 
+                   Text="{Binding SearchJob, Mode=TwoWay}"                    
+                   FontSize="Large"
+                   FontAttributes="Italic"
                    Margin="5"/>
-            
+
             <CollectionView ItemsSource="{Binding EndedJobs}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>

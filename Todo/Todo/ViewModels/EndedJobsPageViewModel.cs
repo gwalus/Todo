@@ -3,9 +3,10 @@ using Prism.AppModel;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Todo.Dtos;
+using Todo.Helpers;
+using Todo.Models;
 using Todo.Services;
 
 namespace Todo.ViewModels
@@ -16,13 +17,18 @@ namespace Todo.ViewModels
         private readonly IDataService _dataService;
         private readonly INavigationService _navigationService;
 
+        private List<JobEndedDto> _endedJobs;
+
+        private RelayCommand<int> _goToNextPageCommand;
+        private RelayCommand<int> _goToPrevPageCommand;
+
         private int _jobsCount;
+        private int _pageNumber = 1;
         private int _pageSize = 10;
+        private string _searchJob;
         #endregion
 
         #region Properties
-        private List<JobEndedDto> _endedJobs;
-
         public List<JobEndedDto> EndedJobs
         {
             get { return _endedJobs; }
@@ -32,8 +38,6 @@ namespace Todo.ViewModels
                 RaisePropertyChanged(nameof(EndedJobs));
             }
         }
-
-        private int _pageNumber = 1;
 
         public int PageNumber
         {
@@ -45,15 +49,20 @@ namespace Todo.ViewModels
             }
         }
 
+        public string SearchJob
+        {
+            get { return _searchJob; }
+            set 
+            {
+                _searchJob = value;
+                RaisePropertyChanged(nameof(SearchJob));
+                Task.Run(() => GetEndedJobsSearch(PageNumber, _searchJob)).Wait();
+            }
+        }
         #endregion
 
         #region Commands
-        private RelayCommand<int> _goToNextPageCommand;
-
         public RelayCommand<int> GoToNextPageCommand => _goToNextPageCommand ??= new RelayCommand<int>(GoToNextPage, GoToNextPageCanExecute);
-
-        private RelayCommand<int> _goToPrevPageCommand;
-
         public RelayCommand<int> GoToPrevPageCommand => _goToPrevPageCommand ??= new RelayCommand<int>(GoToPrevPage, GoToPrevPageCanExecute);
         #endregion
 
@@ -65,27 +74,38 @@ namespace Todo.ViewModels
 
             Task.Run(() => GetCountJobs()).Wait();
         }
+        #endregion
 
+        #region Methods
         private async void GetCountJobs()
         {
             var jobs = await _dataService.GetEndedJobs();
             _jobsCount = jobs.Count;
         }
-        #endregion
 
-        #region Methods
-        private async Task GetEndedJobs(int pageNumber, int jobsCount = 10)
+        private async Task GetEndedJobs(int currentPage)
         {
             var endedJobs = await _dataService.GetEndedJobs();
 
-            var pagedEndedJobs = endedJobs
-                .Skip((pageNumber - 1) * jobsCount)
-                .Take(jobsCount)
-                .ToList();
+            var pagedList = new PagedList<Job>().CreatePagedList(endedJobs, currentPage);
 
+            CreateEndedJobList(pagedList);
+        }
+
+        private async Task GetEndedJobsSearch(int currentPage, string description)
+        {
+            var endedJobs = await _dataService.GetEndedJobs();
+
+            var pagedList = new PagedList<Job>().CreatePagedListByDescription(endedJobs, currentPage, description);
+
+            CreateEndedJobList(pagedList);
+        }
+
+        private void CreateEndedJobList(List<Job> pagedList)
+        {
             EndedJobs = new List<JobEndedDto>();
 
-            foreach (var endedJob in pagedEndedJobs)
+            foreach (var endedJob in pagedList)
             {
                 var jobsEndedDto = new JobEndedDto()
                 {
