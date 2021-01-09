@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo", "Todo\Todo\Todo.csproj", "{ED347D2F-1B29-49E0-8402-25403CF47A8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo", "Todo\Todo\Todo.csproj", "{ED347D2F-1B29-49E0-8402-25403CF47A8E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Android", "Todo\Todo.Android\Todo.Android.csproj", "{362696EF-B636-4E10-A6CE-A2ADB173D750}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.iOS", "Todo\Todo.iOS\Todo.iOS.csproj", "{09D2C86D-2150-45D0-8D18-88484129C39A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoDatabase", "TodoDatabase\TodoDatabase.csproj", "{5E108ABA-FD4C-4DAE-83DA-FB8DDD6B6150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoDatabase", "TodoDatabase\TodoDatabase.csproj", "{5E108ABA-FD4C-4DAE-83DA-FB8DDD6B6150}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
